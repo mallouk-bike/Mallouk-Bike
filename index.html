@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mallouk Bike – Les Meilleurs Vélos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {font-family:'Quicksand',Arial,sans-serif; background: #f6fcff; margin: 0; color:#223;}
+    .header {text-align:center; padding:42px 10px 18px; background: linear-gradient(90deg,#5eead4 0%,#fffbe5 100%);}
+    .logo {width: 100px; border-radius:50%; box-shadow:0 4px 24px #ffd94aaa;}
+    .title {font-size:2.3em; font-weight:700; color:#34d399; letter-spacing:1.2px;}
+    .subtitle{color:#15986d;font-size:1.1em;}
+    .add-bike-form{max-width:440px;margin:30px auto 0;background:#fff;border-radius:15px;box-shadow:0 3px 18px #34d39915;padding:24px 18px;}
+    .add-bike-form .form-title{font-weight:700;font-size:1.18em;color:#22bb77;margin-bottom:13px;}
+    .add-bike-form input[type="text"]{width:100%;margin-bottom:8px;padding:10px;border-radius:7px;border:1.4px solid #ddd;font-size:1em;font-family:inherit;}
+    .add-bike-form input[type="text"]:focus{outline:none;border-color:#34d399;}
+    .add-bike-form input[type="file"]{width:100%;margin-bottom:8px;padding:10px;border-radius:7px;border:1.4px solid #ddd;font-size:0.95em;font-family:inherit;background:#f9f9f9;}
+    .add-bike-form input[type="file"]:focus{outline:none;border-color:#34d399;}
+    .add-bike-form .add-btn{background:#22bb77;color:#fff;border:none;border-radius:7px;padding:10px 24px;font-size:1em;font-weight:700;cursor:pointer;font-family:'Montserrat',Arial;}
+    .add-bike-form .add-btn:hover{background:#1a9e68;}
+    .add-bike-form .msg{margin-left:13px;font-size:0.98em;font-weight:600;}
+    .bikes-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;max-width:1050px;margin:36px auto 0;padding:0 12px;}
+    .bike-card{background:#fff;box-shadow:0 4px 32px #34d39925;padding:28px 16px 20px;border-radius:18px;display:flex;flex-direction:column;align-items:center;position:relative;}
+    .badge{position:absolute;top:19px;left:24px;padding:6px 17px;background:#ffd94a;color:#876200;font-weight:700;border-radius:8px; font-size:1em;}
+    .bike-img{width:94%; max-width:210px;height:140px;object-fit:cover; border-radius:10px;background:#eafff4;box-shadow:0 2px 11px #1de9b622;margin-bottom:10px; cursor:zoom-in;}
+    .bike-name{font-size:1.1em;font-weight:700;color:#34d399;letter-spacing:.4px; background:#d9ffd3;width:fit-content;padding:7px 22px;border-radius:7px;}
+    .share-btn{margin-top:12px;background:#34d399;color:#fff;font-family:'Montserrat',Arial,sans-serif;font-weight:700;border:none;border-radius:7px;padding:9px 26px;font-size:1em;box-shadow:0 2px 10px #34d39921;cursor:pointer;}
+    .share-btn:hover{background:#22bb77;}
+    .delete-btn{margin-top:9px;background:#d9303e;color:#fff;font-family:'Montserrat',Arial;font-weight:700;border:none;border-radius:7px;padding:7px 20px;font-size:0.98em;cursor:pointer;box-shadow:0 2px 8px #d9303e22;}
+    .delete-btn:hover{background:#b52730;}
+    .footer{text-align:center;padding:22px 14px;color:#22bb77;font-size:1em;margin-top:38px;}
+    .popup-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(44,221,153,.12);backdrop-filter:blur(3px);display:none;justify-content:center;align-items:center;z-index:1000;}
+    .popup-overlay.active{display:flex;}
+    .popup-img-box{background:#fff;box-shadow:0 8px 44px #34d39933;border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;position:relative;max-width:90vw;max-height:90vh;}
+    .popup-img{max-width:100%; max-height:80vh; border-radius:13px;}
+    .close-btn{position:absolute;top:6px;right:12px;font-size:2em;color:#34d399;background:none;border:none;cursor:pointer;}
+    .share-popup{background:#fff;box-shadow:0 8px 32px #34d39933;padding:27px 18px 22px;border-radius:13px;max-width:94vw;width:380px;display:none;flex-direction:column;align-items:center;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2000;}
+    .share-popup.active{display:flex;}
+    .share-popup-title{font-weight:700;color:#25ba7b;font-size:1.08em;margin-bottom:10px;font-family:'Montserrat';}
+    .share-popup input{width:99%;margin-top:7px;padding:9px 10px;border-radius:7px;border:1.5px solid #dddddd;font-size:0.95em;}
+    .share-popup input:focus{outline:none;border-color:#34d399;}
+    .share-popup .copy-btn{margin-top:14px;background:#34d399;color:#fff;font-weight:700;border:none;border-radius:7px;padding:9px 21px;cursor:pointer;font-size:1em;}
+    .share-popup .copy-btn:hover{background:#22bb77;}
+    .share-popup .copied{display:none;margin-top:8px;color:#22bb77;font-weight:700;}
+    .share-popup .copied.active{display:block;}
+    .share-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);backdrop-filter:blur(1.5px);z-index:1999;display:none;}
+    .share-overlay.active{display:block;}
+    @media (max-width:800px){.bikes-list{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://i.postimg.cc/kgrvnzGZ/image-2-Photoroom.png" class="logo" alt="Logo Mallouk Bike">
+    <div class="title">Mallouk Bike</div>
+    <div class="subtitle">Laisse-toi scotcher par nos vélos 🚀</div>
+  </div>
+
+  <div class="add-bike-form">
+    <div class="form-title">Ajouter un vélo 🔽</div>
+    <input type="text" id="newBikeName" placeholder="Nom du vélo">
+    <input type="text" id="newBikeType" placeholder="Type (ex: VTT, Urbain...)">
+    <input type="file" id="newBikeImgFile" accept="image/*">
+    <button class="add-btn" onclick="addBike()">Ajouter 🚲</button>
+    <span class="msg" id="addBikeMsg"></span>
+  </div>
+
+  <div class="bikes-list" id="bikesList">
+    <!-- Les vélos sont générés dynamiquement via JS -->
+  </div>
+
+  <div class="popup-overlay" id="popup">
+    <div class="popup-img-box">
+      <button class="close-btn" onclick="closePopup()">×</button>
+      <img src="" class="popup-img" id="popup-img" alt="Zoom Vélo" />
+    </div>
+  </div>
+
+  <div class="share-overlay" id="share-overlay" onclick="closeShare()"></div>
+  <div class="share-popup" id="share-popup">
+    <button class="close-btn" onclick="closeShare()">×</button>
+    <div class="share-popup-title">Partage ce vélo 🚴‍♂️</div>
+    <input type="text" id="share-link" readonly value="">
+    <button class="copy-btn" onclick="copyShare()">Copier le lien 📋</button>
+    <span class="copied" id="copied-msg">✅ Lien copié !</span>
+  </div>
+
+  <div class="footer">
+    © 2025 Mallouk Bike – Partage & reviens vite !
+  </div>
+
+  <!-- 🔥 FIREBASE CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <script>
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqr8cCSO_RZRxNWdz75DAJJsHxNLXS9Jc",
+      authDomain: "mallouk-bike.firebaseapp.com",
+      databaseURL: "https://mallouk-bike-default-rtdb.firebaseio.com",
+      projectId: "mallouk-bike",
+      storageBucket: "mallouk-bike.firebasestorage.app",
+      messagingSenderId: "847523992830",
+      appId: "1:847523992830:web:210166ba53b3220bc281af",
+      measurementId: "G-GQF1FPY409"
+    };
+
+
+
+    // ✅ Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const ADMIN_PASSWORD = "mallouk2025";
+
+    // ❌ SUPPRIMÉ : Plus de vélos par défaut hardcodés
+    // ❌ SUPPRIMÉ : La fonction initDefaultBikesIfNeeded()
+
+    // 🔥 Affichage en temps réel
+    function renderBikes() {
+      db.ref('mallouk_bikes').on('value', function(snapshot) {
+        const bikesObj = snapshot.val() || {};
+        const bikes = Object.entries(bikesObj).map(([bikeId, bike]) => ({...bike, id: bikeId}));
+        const list = document.getElementById('bikesList');
+        list.innerHTML = '';
+        bikes.forEach((bike) => {
+          const card = document.createElement('div');
+          card.className = "bike-card";
+          card.innerHTML = `
+            <span class="badge">${bike.type}</span>
+            <img src="${bike.img}" class="bike-img" alt="${bike.name}" data-name="${bike.name}" data-id="${bike.id}">
+            <div class="bike-name">${bike.name}</div>
+            <button class="share-btn" onclick="shareBike('${bike.name.replace(/'/g,"\\'")}')">Partager 📤</button>
+            <button class="delete-btn" onclick="deleteBike('${bike.id}')">Supprimer 🗑️</button>
+          `;
+          list.appendChild(card);
+        });
+        attachZoom();
+      });
+    }
+    window.addEventListener("DOMContentLoaded", renderBikes);
+
+    // Zoom image
+    const popup = document.getElementById('popup');
+    const popupImg = document.getElementById('popup-img');
+
+    function attachZoom() {
+      document.querySelectorAll('.bike-img').forEach(img => {
+        img.onclick = function() {
+          popupImg.src = this.src;
+          popup.classList.add('active');
+        }
+      });
+    }
+
+    function closePopup() {
+      popup.classList.remove('active');
+      popupImg.src = "";
+    }
+
+    document.addEventListener('keydown',function(e){
+      if(e.key === 'Escape'){closePopup();closeShare();}
+    });
+    popup.addEventListener('click',function(e){ if(e.target === popup) closePopup(); });
+
+    // Partage
+    function shareBike(name) {
+      let baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      let shareUrl = baseUrl + "?bike=" + encodeURIComponent(name);
+      document.getElementById('share-popup').classList.add('active');
+      document.getElementById('share-overlay').classList.add('active');
+      document.getElementById('share-link').value = shareUrl;
+      document.getElementById('copied-msg').classList.remove('active');
+    }
+
+    function closeShare() {
+      document.getElementById('share-popup').classList.remove('active');
+      document.getElementById('share-overlay').classList.remove('active');
+    }
+
+    function copyShare() {
+      let input = document.getElementById('share-link');
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      document.getElementById('copied-msg').classList.add('active');
+      setTimeout(function() {
+        document.getElementById('copied-msg').classList.remove('active');
+      }, 1400);
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const bikeName = params.get('bike');
+      if (bikeName) {
+        setTimeout(() => {
+          const targetCard = Array.from(document.querySelectorAll('.bike-img'))
+            .find(img => img.getAttribute('data-name').toLowerCase() === bikeName.toLowerCase());
+          if (targetCard) {
+            targetCard.closest('.bike-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            targetCard.closest('.bike-card').style.boxShadow = "0 0 44px 6px #34d399aa";
+            targetCard.closest('.bike-card').style.border = '2.5px solid #34d399';
+            setTimeout(() => {
+              targetCard.closest('.bike-card').style.boxShadow="";
+              targetCard.closest('.bike-card').style.border="";
+            }, 2800);
+          }
+        }, 300);
+      }
+    });
+
+    // Mot de passe
+    function demandeMotDePasse(action) {
+      let saisie = prompt(`Mot de passe requis pour ${action} :`);
+      return saisie === ADMIN_PASSWORD;
+    }
+
+    // 🔥 Ajout avec upload depuis l'appareil
+    function addBike() {
+      let msg = document.getElementById('addBikeMsg');
+
+      if (!demandeMotDePasse("ajouter un vélo")) {
+        msg.textContent = "⛔ Mot de passe incorrect.";
+        msg.style.color = "#d9303e";
+        setTimeout(()=>{msg.textContent="";}, 2000);
+        return;
+      }
+
+      const name = document.getElementById('newBikeName').value.trim();
+      const type = document.getElementById('newBikeType').value.trim();
+      const fileInput = document.getElementById('newBikeImgFile');
+      const file = fileInput.files[0];
+
+      if (!name || !type || !file) {
+        msg.textContent = "⚠️ Remplis tous les champs !";
+        msg.style.color = "#d9303e";
+        return;
+      }
+
+      // Lire l'image en base64
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        let imgData = e.target.result; // base64 URI
+        // 🔥 Ajout sur Firebase avec un id unique
+        const bikeId = Date.now() + Math.floor(Math.random()*10000);
+        db.ref('mallouk_bikes/' + bikeId).set({ name, type, img: imgData }, function(error){
+          if(!error){
+            msg.textContent = "✅ Vélo ajouté !";
+            msg.style.color = "#16a085";
+            setTimeout(()=>{msg.textContent="";}, 2000);
+            document.getElementById('newBikeName').value = "";
+            document.getElementById('newBikeType').value = "";
+            fileInput.value = "";
+          } else {
+            msg.textContent = "⛔ Erreur lors de l'ajout !";
+            msg.style.color = "#d9303e";
+          }
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // 🔥 Suppression
+    function deleteBike(bikeId) {
+      if (!demandeMotDePasse("supprimer ce vélo")) {
+        alert("⛔ Mot de passe incorrect. Suppression annulée.");
+        return;
+      }
+      if (confirm("🗑️ Supprimer ce vélo ?")) {
+        db.ref('mallouk_bikes/' + bikeId).remove();
+      }
+    }
+  </script>
+</body>
+</html>
