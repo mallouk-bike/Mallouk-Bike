@@ -5,63 +5,458 @@
   <title>Mallouk Bike – Les Meilleurs Vélos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {font-family:'Quicksand',Arial,sans-serif; background: #f6fcff; margin: 0; color:#223;}
-    .header {text-align:center; padding:42px 10px 18px; background: linear-gradient(90deg,#5eead4 0%,#fffbe5 100%);}
-    .logo {width: 100px; border-radius:50%; box-shadow:0 4px 24px #ffd94aaa;}
-    .title {font-size:2.3em; font-weight:700; color:#34d399; letter-spacing:1.2px;}
-    .subtitle{color:#15986d;font-size:1.1em;}
-    .add-bike-form{max-width:440px;margin:30px auto 0;background:#fff;border-radius:15px;box-shadow:0 3px 18px #34d39915;padding:24px 18px;}
-    .add-bike-form .form-title{font-weight:700;font-size:1.18em;color:#22bb77;margin-bottom:13px;}
-    .add-bike-form input[type="text"]{width:100%;margin-bottom:8px;padding:10px;border-radius:7px;border:1.4px solid #ddd;font-size:1em;font-family:inherit;}
-    .add-bike-form input[type="text"]:focus{outline:none;border-color:#34d399;}
-    .add-bike-form input[type="file"]{width:100%;margin-bottom:8px;padding:10px;border-radius:7px;border:1.4px solid #ddd;font-size:0.95em;font-family:inherit;background:#f9f9f9;}
-    .add-bike-form input[type="file"]:focus{outline:none;border-color:#34d399;}
-    .add-bike-form .add-btn{background:#22bb77;color:#fff;border:none;border-radius:7px;padding:10px 24px;font-size:1em;font-weight:700;cursor:pointer;font-family:'Montserrat',Arial;}
-    .add-bike-form .add-btn:hover{background:#1a9e68;}
-    .add-bike-form .msg{margin-left:13px;font-size:0.98em;font-weight:600;}
-    .bikes-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;max-width:1050px;margin:36px auto 0;padding:0 12px;}
-    .bike-card{background:#fff;box-shadow:0 4px 32px #34d39925;padding:28px 16px 20px;border-radius:18px;display:flex;flex-direction:column;align-items:center;position:relative;}
-    .badge{position:absolute;top:19px;left:24px;padding:6px 17px;background:#ffd94a;color:#876200;font-weight:700;border-radius:8px; font-size:1em;}
-    .bike-img{width:94%; max-width:210px;height:140px;object-fit:cover; border-radius:10px;background:#eafff4;box-shadow:0 2px 11px #1de9b622;margin-bottom:10px; cursor:zoom-in;}
-    .bike-name{font-size:1.1em;font-weight:700;color:#34d399;letter-spacing:.4px; background:#d9ffd3;width:fit-content;padding:7px 22px;border-radius:7px;}
-    .share-btn{margin-top:12px;background:#34d399;color:#fff;font-family:'Montserrat',Arial,sans-serif;font-weight:700;border:none;border-radius:7px;padding:9px 26px;font-size:1em;box-shadow:0 2px 10px #34d39921;cursor:pointer;}
-    .share-btn:hover{background:#22bb77;}
-    .delete-btn{margin-top:9px;background:#d9303e;color:#fff;font-family:'Montserrat',Arial;font-weight:700;border:none;border-radius:7px;padding:7px 20px;font-size:0.98em;cursor:pointer;box-shadow:0 2px 8px #d9303e22;}
-    .delete-btn:hover{background:#b52730;}
-    .footer{text-align:center;padding:22px 14px;color:#22bb77;font-size:1em;margin-top:38px;}
-    .popup-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(44,221,153,.12);backdrop-filter:blur(3px);display:none;justify-content:center;align-items:center;z-index:1000;}
+    :root {
+      --gradient: linear-gradient(90deg,#5eead4 0%,#34d399 100%);
+      --glass-bg: rgba(255,255,255,0.4);
+      --glass-blur: blur(10px);
+      --green: #34d399;
+      --turquoise: #5eead4;
+      --gold: #ffd94a;
+      --danger: #d9303e;
+      --info: #3191e1;
+      --gray: #f6fcff;
+    }
+    html {box-sizing: border-box;}
+    *,*:before,*:after {box-sizing: inherit;}
+    body {
+      font-family:'Quicksand',Arial,sans-serif;
+      background: var(--gray);
+      margin: 0;
+      color:#223;
+      min-height: 100vh;
+      transition: background 0.4s;
+    }
+    .header {
+      position: relative;
+      text-align:center;
+      padding:40px 10px 20px;
+      background: var(--gradient);
+      background-size: 150% 150%;
+      animation: gradientBG 6s ease-in-out infinite alternate;
+      border-bottom: 1.5px solid #eafff4;
+      box-shadow: 0 6px 40px #34d39933;
+    }
+    @keyframes gradientBG {
+      to {background-position: 100% 100%;}
+    }
+    .glass {
+      background: var(--glass-bg);
+      box-shadow: 0 4px 32px #34d39922;
+      backdrop-filter: var(--glass-blur);
+      border-radius: 18px;
+      padding: 16px 24px;
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+    .logo {
+      width: 80px;
+      border-radius:50%;
+      box-shadow:0 4px 24px #ffd94aaa;
+      margin-bottom: 14px;
+      background: #fff;
+    }
+    .title {
+      font-size:2.2em;
+      font-weight:700;
+      color:#fff;
+      letter-spacing:1.2px;
+      text-shadow: 0 2px 11px #34d39988;
+      margin-bottom: 9px;
+    }
+    .subtitle{
+      color:#fffbe5;
+      font-size:1.12em;
+      font-weight:600;
+      text-shadow:0 2px 12px #34d39955;
+      margin-bottom: 14px;
+    }
+    .search-bar-box {
+      margin: 0 auto 0;
+      max-width: 460px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      justify-content: center;
+    }
+    .search-bar {
+      width: 100%;
+      font-family: inherit;
+      padding: 13px 44px 13px 18px;
+      border-radius: 15px;
+      border: none;
+      font-size: 1.05em;
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 2px 18px #34d39915;
+      transition: box-shadow 0.2s;
+      outline: none;
+      color: #223;
+    }
+    .search-bar:focus {
+      box-shadow: 0 4px 18px #34d39944;
+      border: 1.8px solid var(--turquoise);
+    }
+    .search-icon {
+      position: absolute;
+      right: 19px;
+      font-size: 1.3em;
+      color: var(--green);
+      pointer-events: none;
+    }
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 13px;
+      margin: 24px 0 12px;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Montserrat', Arial;
+      font-weight: 700;
+      background: linear-gradient(90deg, #eafff4 0%, #fffbe5 70%);
+      color: var(--green);
+      cursor: pointer;
+      box-shadow: 0 2px 10px #34d39915;
+      transition: background 0.18s, box-shadow 0.22s, color 0.18s, transform 0.22s;
+      position: relative;
+      outline: none;
+    }
+    .filter-btn.active {
+      background: var(--gradient);
+      color: #fff;
+      box-shadow: 0 4px 20px #34d39933;
+      transform: scale(1.08);
+    }
+    .filter-btn:active::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%,-50%) scale(1.1);
+      background: rgba(52,211,153,0.13);
+      border-radius: 10px;
+      z-index: 1;
+      animation: rippleBtn 0.3s linear;
+    }
+    @keyframes rippleBtn {
+      to {opacity:0; transform:translate(-50%,-50%) scale(2);}
+    }
+    .counter {
+      text-align:center;
+      margin: 10px auto 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size:1.05em;
+    }
+    .add-bike-form {
+      max-width:440px;
+      margin:36px auto 0;
+      background: #fff;
+      border-radius:18px;
+      box-shadow:0 3px 22px #34d39919;
+      padding:28px 18px 18px;
+      position: relative;
+      overflow: visible;
+    }
+    .add-bike-form .form-title {
+      font-weight:700;
+      font-size:1.18em;
+      color:var(--green);
+      margin-bottom:14px;
+      letter-spacing:0.5px;
+    }
+    .add-bike-form input[type="text"], .add-bike-form select {
+      width:100%;
+      margin-bottom:10px;
+      padding:11px;
+      border-radius:11px;
+      border:1.7px solid #eee;
+      font-size:1em;
+      font-family:inherit;
+      background: #f9f9f9;
+      transition: border 0.2s;
+    }
+    .add-bike-form input[type="text"]:focus, .add-bike-form select:focus {
+      outline:none;
+      border-color:var(--green);
+      background: #f6fcff;
+    }
+    .add-bike-form input[type="file"] {
+      width:100%;
+      margin-bottom:10px;
+      padding:10px;
+      border-radius:11px;
+      border:1.7px solid #eee;
+      font-size:0.97em;
+      font-family:inherit;
+      background:#f9f9f9;
+    }
+    .add-bike-form input[type="file"]:focus {
+      outline:none;
+      border-color:var(--green);
+    }
+    .add-bike-form .add-btn {
+      background: var(--gradient);
+      color: #fff;
+      border: none;
+      border-radius: 11px;
+      padding: 11px 30px;
+      font-size:1.08em;
+      font-weight:700;
+      cursor:pointer;
+      font-family:'Montserrat',Arial;
+      box-shadow: 0 2px 12px #34d39921;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.19s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .add-bike-form .add-btn:active::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%,-50%) scale(1.1);
+      background: rgba(52,211,153,0.13);
+      border-radius: 11px;
+      z-index: 1;
+      animation: rippleBtn 0.3s linear;
+    }
+    .add-bike-form .msg {
+      margin-left:13px;
+      font-size:0.98em;
+      font-weight:600;
+      position: absolute;
+      right: 24px;
+      top: 19px;
+    }
+    .add-bike-form .loading {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      border: 3px solid #34d39933;
+      border-top: 3px solid #34d399;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-left:7px;
+    }
+    @keyframes spin {
+      to {transform: rotate(360deg);}
+    }
+    .bikes-list {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+      gap:32px;
+      max-width:1080px;
+      margin:42px auto 0;
+      padding:0 12px;
+      min-height: 120px;
+      transition: min-height 0.3s;
+    }
+    .no-result {
+      text-align:center;
+      color: #d9303e;
+      font-size:1.07em;
+      background: #fff2f2;
+      border-radius: 13px;
+      margin: 30px auto 0;
+      padding: 24px 15px;
+      max-width: 420px;
+      box-shadow: 0 2px 12px #d9303e11;
+      animation: fadeIn 0.4s;
+    }
+    .bike-card {
+      background:#fff;
+      box-shadow:0 4px 32px #34d39925;
+      padding:30px 18px 20px;
+      border-radius:22px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      position:relative;
+      animation: fadeIn 0.7s cubic-bezier(.24,.93,.63,1.08);
+      opacity: 0;
+      transform: scale(0.97) translateY(12px);
+      animation-fill-mode: forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .bike-card:hover {
+      box-shadow:0 8px 44px #34d39938;
+      transform: scale(1.03) perspective(700px) rotateY(-2deg) rotateX(2deg);
+      transition: box-shadow 0.25s, transform 0.3s;
+    }
+    .badge {
+      position:absolute;
+      top:18px;
+      left:21px;
+      padding:7px 18px;
+      font-weight:700;
+      border-radius:10px;
+      font-size:1em;
+      box-shadow: 0 2px 8px #fffbe599;
+      letter-spacing: 1px;
+      z-index: 1;
+      color: #fff;
+    }
+    .badge.vtt {background: linear-gradient(90deg,#00c3a0 0%,#34d399 90%);}
+    .badge.route {background: linear-gradient(90deg,#3191e1 0%,#5eead4 80%);}
+    .badge.trottinette {background: linear-gradient(90deg,#b7c800 0%,#ffd94a 90%); color: #876200;}
+    .badge.accessoires {background: linear-gradient(90deg,#f88372 0%,#ffd94a 70%); color: #876200;}
+    .badge.mecanique {background: linear-gradient(90deg,#d9303e 0%,#34d399 70%);}
+    .badge.enfant {background: linear-gradient(90deg,#f7b2d9 0%,#5eead4 80%);}
+    .bike-img {
+      width:95%; max-width:210px;height:140px;object-fit:cover; border-radius:13px;background:#eafff4;box-shadow:0 2px 11px #1de9b622;margin-bottom:11px; cursor:zoom-in; transition: transform 0.18s, box-shadow 0.2s;
+    }
+    .bike-card:hover .bike-img {
+      transform: scale(1.08) rotateZ(-2deg);
+      box-shadow: 0 4px 22px #34d39933;
+    }
+    .bike-name {
+      font-size:1.16em;
+      font-weight:700;
+      color:var(--green);
+      letter-spacing:.6px;
+      background:#d9ffd3;
+      width:fit-content;
+      padding:8px 27px;
+      border-radius:13px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 12px #34d39918;
+      font-family: 'Montserrat';
+    }
+    .bike-desc {
+      font-size:0.98em;
+      color:#444;
+      background: #f6fcff;
+      border-radius: 7px;
+      padding: 8px 13px;
+      margin-bottom: 10px;
+      text-align: center;
+      min-height: 32px;
+      font-family: inherit;
+      letter-spacing: 0.2px;
+    }
+    .card-btns {
+      display: flex;
+      gap: 9px;
+      margin-top: 13px;
+    }
+    .share-btn, .delete-btn {
+      background: var(--gradient);
+      color: #fff;
+      font-family:'Montserrat',Arial,sans-serif;
+      font-weight:700;
+      border:none;
+      border-radius:11px;
+      padding:10px 26px;
+      font-size:1em;
+      box-shadow:0 2px 10px #34d39921;
+      cursor:pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.17s;
+    }
+    .share-btn:active, .delete-btn:active {
+      box-shadow:0 4px 20px #34d39933;
+      transform: scale(1.06);
+    }
+    .delete-btn {
+      background: linear-gradient(90deg,#d9303e 0%,#ffd94a 90%);
+      color:#fff;
+    }
+    .delete-btn:active {
+      box-shadow:0 4px 20px #d9303e33;
+      transform: scale(1.07);
+    }
+    .footer {
+      text-align:center;
+      padding:22px 14px 10px;
+      color:var(--green);
+      font-size:1em;
+      margin-top:48px;
+      background: linear-gradient(90deg,#5eead4 0%,#fffbe5 100%);
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 -2px 28px #34d39922;
+    }
+    .popup-overlay {
+      position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(44,221,153,.14);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:1000;
+    }
     .popup-overlay.active{display:flex;}
-    .popup-img-box{background:#fff;box-shadow:0 8px 44px #34d39933;border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;position:relative;max-width:90vw;max-height:90vh;}
-    .popup-img{max-width:100%; max-height:80vh; border-radius:13px;}
-    .close-btn{position:absolute;top:6px;right:12px;font-size:2em;color:#34d399;background:none;border:none;cursor:pointer;}
-    .share-popup{background:#fff;box-shadow:0 8px 32px #34d39933;padding:27px 18px 22px;border-radius:13px;max-width:94vw;width:380px;display:none;flex-direction:column;align-items:center;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2000;}
+    .popup-img-box{
+      background:var(--glass-bg);
+      box-shadow:0 8px 44px #34d39933;border-radius:23px;padding:22px;display:flex;flex-direction:column;align-items:center;position:relative;max-width:90vw;max-height:90vh;
+      backdrop-filter: blur(11px);
+      animation: fadeIn 0.3s;
+    }
+    .popup-img{max-width:100%; max-height:80vh; border-radius:16px;}
+    .close-btn{position:absolute;top:8px;right:15px;font-size:2.1em;color:var(--green);background:none;border:none;cursor:pointer;z-index:2;}
+    .share-popup{background:var(--glass-bg);box-shadow:0 8px 32px #34d39933;padding:27px 18px 22px;border-radius:17px;max-width:97vw;width:390px;display:none;flex-direction:column;align-items:center;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2000;backdrop-filter:blur(11px);}
     .share-popup.active{display:flex;}
-    .share-popup-title{font-weight:700;color:#25ba7b;font-size:1.08em;margin-bottom:10px;font-family:'Montserrat';}
-    .share-popup input{width:99%;margin-top:7px;padding:9px 10px;border-radius:7px;border:1.5px solid #dddddd;font-size:0.95em;}
-    .share-popup input:focus{outline:none;border-color:#34d399;}
-    .share-popup .copy-btn{margin-top:14px;background:#34d399;color:#fff;font-weight:700;border:none;border-radius:7px;padding:9px 21px;cursor:pointer;font-size:1em;}
-    .share-popup .copy-btn:hover{background:#22bb77;}
-    .share-popup .copied{display:none;margin-top:8px;color:#22bb77;font-weight:700;}
+    .share-popup-title{font-weight:700;color:#25ba7b;font-size:1.1em;margin-bottom:13px;font-family:'Montserrat';}
+    .share-popup input{width:99%;margin-top:9px;padding:10px 12px;border-radius:11px;border:1.5px solid #dddddd;font-size:0.99em; background: #fff;}
+    .share-popup input:focus{outline:none;border-color:var(--green);}
+    .share-popup .copy-btn{margin-top:14px;background:var(--gradient);color:#fff;font-weight:700;border:none;border-radius:11px;padding:11px 27px;cursor:pointer;font-size:1em;display: flex;align-items: center;gap: 7px;}
+    .share-popup .copy-btn:active {
+      box-shadow:0 4px 20px #34d39933;
+      transform: scale(1.07);
+    }
+    .share-popup .copied{display:none;margin-top:8px;color:var(--green);font-weight:700;}
     .share-popup .copied.active{display:block;}
-    .share-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);backdrop-filter:blur(1.5px);z-index:1999;display:none;}
+    .share-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.28);backdrop-filter:blur(1.5px);z-index:1999;display:none;}
     .share-overlay.active{display:block;}
-    @media (max-width:800px){.bikes-list{grid-template-columns:1fr;}}
+    @media (max-width:800px){.bikes-list{grid-template-columns:1fr;}.badge{left:9px;top:9px;} .add-bike-form{padding: 18px 7px;} .footer{font-size:0.97em;} .bike-name{font-size:1em;} .bike-card{padding:18px 7px 15px;} }
+    @media (max-width:520px){.header{padding:24px 4px 11px;} .glass{padding:10px 7px;} .search-bar-box{max-width:99vw;} }
   </style>
 </head>
 <body>
   <div class="header">
-    <img src="https://i.postimg.cc/kgrvnzGZ/image-2-Photoroom.png" class="logo" alt="Logo Mallouk Bike">
-    <div class="title">Mallouk Bike</div>
-    <div class="subtitle">Laisse-toi scotcher par nos vélos 🚀</div>
+    <div class="glass">
+      <img src="https://i.postimg.cc/kgrvnzGZ/image-2-Photoroom.png" class="logo" alt="Logo Mallouk Bike">
+      <div class="title">Mallouk Bike</div>
+      <div class="subtitle">Laisse-toi scotcher par nos vélos 🚀</div>
+      <div class="search-bar-box">
+        <input type="text" class="search-bar" id="searchBar" placeholder="Rechercher un produit..." autocomplete="off">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+    <div class="category-filters" id="categoryFilters">
+      <!-- Boutons de filtres dynamiques -->
+    </div>
+    <div class="counter" id="counter"></div>
   </div>
 
   <div class="add-bike-form">
-    <div class="form-title">Ajouter un vélo 🔽</div>
-    <input type="text" id="newBikeName" placeholder="Nom du vélo">
-    <input type="text" id="newBikeType" placeholder="Type (ex: VTT, Urbain...)">
+    <div class="form-title">Ajouter un produit 🚲🛴</div>
+    <input type="text" id="newBikeName" placeholder="Nom du produit">
+    <select id="newBikeCategory">
+      <option value="">Choisir une catégorie</option>
+      <option value="vtt">Vélos VTT</option>
+      <option value="route">Vélos route</option>
+      <option value="trottinette">Trottinette</option>
+      <option value="accessoires">Accessoires</option>
+      <option value="mecanique">Mécanique</option>
+      <option value="enfant">Vélos enfant</option>
+    </select>
+    <input type="text" id="newBikeDesc" placeholder="Description (facultatif)">
     <input type="file" id="newBikeImgFile" accept="image/*">
-    <button class="add-btn" onclick="addBike()">Ajouter 🚲</button>
+    <button class="add-btn" id="addBikeBtn" onclick="addBike()"><i class="fa fa-plus-circle"></i>Ajouter</button>
     <span class="msg" id="addBikeMsg"></span>
   </div>
 
@@ -69,20 +464,22 @@
     <!-- Les vélos sont générés dynamiquement via JS -->
   </div>
 
+  <div class="no-result" id="noResult" style="display:none;">Aucun produit ne correspond à votre recherche... 😔</div>
+
   <div class="popup-overlay" id="popup">
     <div class="popup-img-box">
-      <button class="close-btn" onclick="closePopup()">×</button>
-      <img src="" class="popup-img" id="popup-img" alt="Zoom Vélo" />
+      <button class="close-btn" onclick="closePopup()"><i class="fa fa-times"></i></button>
+      <img src="" class="popup-img" id="popup-img" alt="Zoom Produit" />
     </div>
   </div>
 
   <div class="share-overlay" id="share-overlay" onclick="closeShare()"></div>
   <div class="share-popup" id="share-popup">
-    <button class="close-btn" onclick="closeShare()">×</button>
-    <div class="share-popup-title">Partage ce vélo 🚴‍♂️</div>
+    <button class="close-btn" onclick="closeShare()"><i class="fa fa-times"></i></button>
+    <div class="share-popup-title">Partage ce produit 🚴‍♂️</div>
     <input type="text" id="share-link" readonly value="">
-    <button class="copy-btn" onclick="copyShare()">Copier le lien 📋</button>
-    <span class="copied" id="copied-msg">✅ Lien copié !</span>
+    <button class="copy-btn" onclick="copyShare()"><i class="fa fa-copy"></i>Copier le lien</button>
+    <span class="copied" id="copied-msg"><i class="fa fa-check"></i> Lien copié !</span>
   </div>
 
   <div class="footer">
@@ -94,7 +491,17 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
   <script>
-    
+    const CATEGORIES = [
+      {id:'vtt',label:'Vélos VTT',badge:'vtt'},
+      {id:'route',label:'Vélos route',badge:'route'},
+      {id:'trottinette',label:'Trottinette',badge:'trottinette'},
+      {id:'accessoires',label:'Accessoires',badge:'accessoires'},
+      {id:'mecanique',label:'Mécanique',badge:'mecanique'},
+      {id:'enfant',label:'Vélos enfant',badge:'enfant'}
+    ];
+    const CATEGORY_LOOKUP = Object.fromEntries(CATEGORIES.map(c => [c.id, c]));
+
+    // --- Firebase Config ---
     const firebaseConfig = {
       apiKey: "AIzaSyCqr8cCSO_RZRxNWdz75DAJJsHxNLXS9Jc",
       authDomain: "mallouk-bike.firebaseapp.com",
@@ -105,46 +512,130 @@
       appId: "1:847523992830:web:210166ba53b3220bc281af",
       measurementId: "G-GQF1FPY409"
     };
-
-
-
-    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     const ADMIN_PASSWORD = "2026";
 
-    // ❌ SUPPRIMÉ : Plus de vélos par défaut hardcodés
-    // ❌ SUPPRIMÉ : La fonction initDefaultBikesIfNeeded()
+    // --- State ---
+    let allBikes = [];
+    let renderTimer = null;
+    let currentCategory = 'all';
+    let currentSearch = '';
 
-    // 🔥 Affichage en temps réel
-    function renderBikes() {
-      db.ref('mallouk_bikes').on('value', function(snapshot) {
-        const bikesObj = snapshot.val() || {};
-        const bikes = Object.entries(bikesObj).map(([bikeId, bike]) => ({...bike, id: bikeId}));
-        const list = document.getElementById('bikesList');
-        list.innerHTML = '';
-        bikes.forEach((bike) => {
-          const card = document.createElement('div');
-          card.className = "bike-card";
-          card.innerHTML = `
-            <span class="badge">${bike.type}</span>
-            <img src="${bike.img}" class="bike-img" alt="${bike.name}" data-name="${bike.name}" data-id="${bike.id}">
-            <div class="bike-name">${bike.name}</div>
-            <button class="share-btn" onclick="shareBike('${bike.name.replace(/'/g,"\\'")}')">Partager 📤</button>
-            <button class="delete-btn" onclick="deleteBike('${bike.id}')">Supprimer 🗑️</button>
-          `;
-          list.appendChild(card);
-        });
-        attachZoom();
+    // --- UI Category Filters ---
+    function renderCategoryFilters() {
+      const filters = document.getElementById('categoryFilters');
+      filters.innerHTML = '';
+      const btnAll = document.createElement('button');
+      btnAll.className = 'filter-btn active';
+      btnAll.textContent = 'Tous';
+      btnAll.onclick = () => filterByCategory('all');
+      btnAll.id = 'filter-btn-all';
+      filters.appendChild(btnAll);
+      CATEGORIES.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = cat.label;
+        btn.onclick = () => filterByCategory(cat.id);
+        btn.id = 'filter-btn-' + cat.id;
+        filters.appendChild(btn);
       });
     }
-    window.addEventListener("DOMContentLoaded", renderBikes);
+    renderCategoryFilters();
 
-    // Zoom image
+    function setCategoryFilterActive(category) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      if(category === 'all') {
+        document.getElementById('filter-btn-all').classList.add('active');
+      } else {
+        const btn = document.getElementById('filter-btn-' + category);
+        if(btn) btn.classList.add('active');
+      }
+    }
+
+    // --- Search ---
+    document.getElementById('searchBar').addEventListener('input', function(e){
+      currentSearch = this.value.trim().toLowerCase();
+      delayedRender();
+    });
+
+    // --- Category Filter ---
+    function filterByCategory(catId) {
+      currentCategory = catId;
+      setCategoryFilterActive(catId);
+      delayedRender(true);
+    }
+
+    // --- Real-time Firebase Fetch ---
+    function loadBikesRealtime() {
+      db.ref('mallouk_bikes').on('value', function(snapshot) {
+        const bikesObj = snapshot.val() || {};
+        allBikes = Object.entries(bikesObj).map(([bikeId, bike]) => ({...bike, id: bikeId}));
+        delayedRender();
+      });
+    }
+
+    // --- Delayed Render for Smooth UX ---
+    function delayedRender(animation = false) {
+      if(renderTimer) clearTimeout(renderTimer);
+      renderTimer = setTimeout(() => renderBikes(animation), 80);
+    }
+
+    // --- Render Bikes with Filtering/Search ---
+    function renderBikes(animate = false) {
+      let bikes = allBikes;
+      // Search filter
+      if(currentSearch) {
+        bikes = bikes.filter(bike => {
+          const name = bike.name?.toLowerCase() || '';
+          const desc = bike.desc?.toLowerCase() || '';
+          const cat = bike.category?.toLowerCase() || '';
+          return name.includes(currentSearch) || desc.includes(currentSearch) || (CATEGORY_LOOKUP[cat]?.label.toLowerCase().includes(currentSearch));
+        });
+      }
+      // Category filter
+      if(currentCategory !== 'all') {
+        bikes = bikes.filter(bike => bike.category === currentCategory);
+      }
+      // Sort by date desc
+      bikes = bikes.slice().sort((a,b) => b.id - a.id);
+      // Render
+      const list = document.getElementById('bikesList');
+      list.innerHTML = '';
+      // Counter
+      document.getElementById('counter').textContent = bikes.length ? (`${bikes.length} produits affichés`) : '';
+      // No result
+      document.getElementById('noResult').style.display = bikes.length ? 'none' : 'block';
+      if(!bikes.length) return;
+      bikes.forEach((bike,i) => {
+        const card = document.createElement('div');
+        card.className = "bike-card";
+        card.style.animationDelay = animate ? (i*40)+'ms' : '0ms';
+        // Badge couleur
+        let badgeClass = CATEGORY_LOOKUP[bike.category]?.badge || '';
+        let badgeLabel = CATEGORY_LOOKUP[bike.category]?.label || bike.category || '';
+        card.innerHTML = `
+          <span class="badge ${badgeClass}">${badgeLabel}</span>
+          <img src="${bike.img}" class="bike-img" alt="${bike.name}" data-name="${bike.name}" data-id="${bike.id}">
+          <div class="bike-name">${bike.name}</div>
+          <div class="bike-desc">${bike.desc ? bike.desc : ''}</div>
+          <div class="card-btns">
+            <button class="share-btn" onclick="shareBike('${escapeQuotes(bike.name)}')"><i class="fa fa-share-alt"></i>Partager</button>
+            <button class="delete-btn" onclick="deleteBike('${bike.id}')"><i class="fa fa-trash"></i>Supprimer</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+      attachZoom();
+    }
+
+    function escapeQuotes(str) {
+      return String(str).replace(/'/g, "\\'").replace(/\"/g, '\\"');
+    }
+
+    // --- Image Zoom ---
     const popup = document.getElementById('popup');
     const popupImg = document.getElementById('popup-img');
-
     function attachZoom() {
       document.querySelectorAll('.bike-img').forEach(img => {
         img.onclick = function() {
@@ -153,18 +644,16 @@
         }
       });
     }
-
     function closePopup() {
       popup.classList.remove('active');
       popupImg.src = "";
     }
-
     document.addEventListener('keydown',function(e){
       if(e.key === 'Escape'){closePopup();closeShare();}
     });
     popup.addEventListener('click',function(e){ if(e.target === popup) closePopup(); });
 
-    // Partage
+    // --- Partage ---
     function shareBike(name) {
       let baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
       let shareUrl = baseUrl + "?bike=" + encodeURIComponent(name);
@@ -173,12 +662,10 @@
       document.getElementById('share-link').value = shareUrl;
       document.getElementById('copied-msg').classList.remove('active');
     }
-
     function closeShare() {
       document.getElementById('share-popup').classList.remove('active');
       document.getElementById('share-overlay').classList.remove('active');
     }
-
     function copyShare() {
       let input = document.getElementById('share-link');
       input.select();
@@ -189,7 +676,6 @@
         document.getElementById('copied-msg').classList.remove('active');
       }, 1400);
     }
-
     window.addEventListener('DOMContentLoaded', function() {
       const params = new URLSearchParams(window.location.search);
       const bikeName = params.get('bike');
@@ -206,51 +692,56 @@
               targetCard.closest('.bike-card').style.border="";
             }, 2800);
           }
-        }, 300);
+        }, 400);
       }
     });
 
-    // Mot de passe
+    // --- Admin Password ---
     function demandeMotDePasse(action) {
       let saisie = prompt(`Mot de passe requis pour ${action} :`);
       return saisie === ADMIN_PASSWORD;
     }
 
-    // 🔥 Ajout avec upload depuis l'appareil
+    // --- Ajout Produit ---
     function addBike() {
       let msg = document.getElementById('addBikeMsg');
-
-      if (!demandeMotDePasse("ajouter un vélo")) {
+      let btn = document.getElementById('addBikeBtn');
+      if (!demandeMotDePasse("ajouter un produit")) {
         msg.textContent = "⛔ Mot de passe incorrect.";
         msg.style.color = "#d9303e";
-        setTimeout(()=>{msg.textContent="";}, 2000);
+        setTimeout(()=>{msg.textContent="";}, 2100);
         return;
       }
-
       const name = document.getElementById('newBikeName').value.trim();
-      const type = document.getElementById('newBikeType').value.trim();
+      const category = document.getElementById('newBikeCategory').value;
+      const desc = document.getElementById('newBikeDesc').value.trim();
       const fileInput = document.getElementById('newBikeImgFile');
       const file = fileInput.files[0];
-
-      if (!name || !type || !file) {
+      if (!name || !category || !file) {
         msg.textContent = "⚠️ Remplis tous les champs !";
         msg.style.color = "#d9303e";
         return;
       }
-
+      // Loading state
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span>Ajout...';
+      msg.textContent = "";
       // Lire l'image en base64
       const reader = new FileReader();
       reader.onload = function(e) {
         let imgData = e.target.result; // base64 URI
-        // 🔥 Ajout sur Firebase avec un id unique
+        // Ajout sur Firebase avec un id unique
         const bikeId = Date.now() + Math.floor(Math.random()*10000);
-        db.ref('mallouk_bikes/' + bikeId).set({ name, type, img: imgData }, function(error){
+        db.ref('mallouk_bikes/' + bikeId).set({ name, category, desc, img: imgData }, function(error){
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa fa-plus-circle"></i>Ajouter';
           if(!error){
-            msg.textContent = "✅ Vélo ajouté !";
+            msg.textContent = "✅ Produit ajouté !";
             msg.style.color = "#16a085";
-            setTimeout(()=>{msg.textContent="";}, 2000);
+            setTimeout(()=>{msg.textContent="";}, 1800);
             document.getElementById('newBikeName').value = "";
-            document.getElementById('newBikeType').value = "";
+            document.getElementById('newBikeCategory').value = "";
+            document.getElementById('newBikeDesc').value = "";
             fileInput.value = "";
           } else {
             msg.textContent = "⛔ Erreur lors de l'ajout !";
@@ -261,16 +752,22 @@
       reader.readAsDataURL(file);
     }
 
-    // 🔥 Suppression
+    // --- Suppression Produit ---
     function deleteBike(bikeId) {
-      if (!demandeMotDePasse("supprimer ce vélo")) {
+      if (!demandeMotDePasse("supprimer ce produit")) {
         alert("⛔ Mot de passe incorrect. Suppression annulée.");
         return;
       }
-      if (confirm("🗑️ Supprimer ce vélo ?")) {
+      if (confirm("🗑️ Supprimer ce produit ?")) {
         db.ref('mallouk_bikes/' + bikeId).remove();
       }
     }
+
+    // --- Initialiser ---
+    window.addEventListener("DOMContentLoaded", function(){
+      loadBikesRealtime();
+      setCategoryFilterActive('all');
+    });
   </script>
 </body>
 </html>
