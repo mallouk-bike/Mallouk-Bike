@@ -57,15 +57,6 @@
       display: inline-block;
       margin-bottom: 18px;
     }
-    .header-glass {
-      width: 100%;
-      max-width: 700px;
-      margin: 0 auto 18px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
     .logo {
       width: 80px;
       border-radius:50%;
@@ -98,7 +89,6 @@
       position: relative;
       justify-content: center;
       flex-direction: row-reverse;
-      width: 100%;
     }
     .search-bar {
       width: 100%;
@@ -129,20 +119,13 @@
     .whatsapp-contact-row {
       display: flex;
       justify-content: center;
-      align-items: stretch;
+      align-items: center;
       margin: 18px 0 0 0;
       width: 100%;
-      gap: 14px;
-      flex-wrap: wrap;
     }
-
-    .whatsapp-contact-btn, .facebook-contact-btn {
-      min-width: 0;
-      flex: 1 1 180px;
-      max-width: 300px;
+    .whatsapp-contact-btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 10px;
       background: var(--whatsapp-gradient);
       color: #fff;
@@ -157,70 +140,48 @@
       transition: box-shadow 0.18s, transform 0.17s, background 0.14s;
       outline: none;
       direction: rtl;
+      min-width: 0;
       will-change: transform, box-shadow;
+      position: relative;
+      z-index: 11;
+      animation: fadeInScale 0.65s cubic-bezier(.23,.7,.52,1.02) 0.1s both;
     }
-
-    .facebook-contact-btn {
-      background: linear-gradient(90deg, #1877f3 70%, #145db2 100%);
-      box-shadow: 0 2px 16px #1877f344;
-    }
-
-    .whatsapp-contact-btn .fa-whatsapp,
-    .facebook-contact-btn .fa-facebook,
-    .facebook-contact-btn .icon {
-      font-size: 1.45em;
-      color: #fff;
-      filter: drop-shadow(0 2px 8px #128c7e33);
-    }
-
-    .facebook-contact-btn .icon {
-      filter: drop-shadow(0 2px 8px #1877f333);
-    }
-
-    .whatsapp-contact-btn:focus,
-    .facebook-contact-btn:focus {
+    .whatsapp-contact-btn:focus {
       outline: 2.5px solid #128c7e;
       outline-offset: 2px;
       box-shadow: 0 0 0 3px #25d36633;
     }
-
-    .whatsapp-contact-btn:hover,
-    .facebook-contact-btn:hover {
+    .whatsapp-contact-btn:hover {
       box-shadow: 0 6px 28px #25d36677;
       transform: scale(1.045);
+      background: linear-gradient(90deg,#26e265 0%,#119e7e 100%);
     }
-
-    .whatsapp-contact-btn:active,
-    .facebook-contact-btn:active {
+    .whatsapp-contact-btn:active {
       transform: scale(1.02);
     }
-
-    /* Responsive pour mobile */
-    @media (max-width: 540px) {
-      .whatsapp-contact-row {
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 8px;
-      }
-      .whatsapp-contact-btn, .facebook-contact-btn {
-        padding: 8px 14px 8px 12px;
-        font-size: 1em;
-        border-radius: 22px;
-        max-width: 98vw;
-        min-width: 0;
-        gap: 7px;
-      }
-      .whatsapp-contact-btn .fa-whatsapp,
-      .facebook-contact-btn .fa-facebook,
-      .facebook-contact-btn .icon {
-        font-size: 1.15em;
-      }
+    .whatsapp-contact-btn .fa-whatsapp {
+      font-size: 1.45em;
+      color: #fff;
+      margin-left: 0;
+      margin-right: 0;
+      filter: drop-shadow(0 2px 8px #128c7e33);
     }
-
     @keyframes fadeInScale {
       0% { opacity: 0; transform: scale(0.8) translateY(-12px); }
       60% { opacity: 1; transform: scale(1.04) translateY(5px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .whatsapp-contact-row {
+        margin: 12px 0 0 0;
+      }
+      .whatsapp-contact-btn {
+        width: 95vw;
+        font-size: 1em;
+        padding: 10px 0 10px 0;
+        border-radius: 17px;
+        justify-content: center;
+      }
     }
     .category-filters {
       display: flex;
@@ -243,14 +204,28 @@
       transition: background 0.18s, box-shadow 0.22s, color 0.18s, transform 0.22s;
       position: relative;
       outline: none;
-      min-width: 0;
-      font-size: 1.07em;
     }
     .filter-btn.active {
       background: var(--gradient);
       color: #fff;
       box-shadow: 0 4px 20px #34d39933;
       transform: scale(1.08);
+    }
+    .filter-btn:active::after {
+      content: '';
+      position: absolute;
+      right: 50%;
+      top: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(50%,-50%) scale(1.1);
+      background: rgba(52,211,153,0.13);
+      border-radius: 10px;
+      z-index: 1;
+      animation: rippleBtn 0.3s linear;
+    }
+    @keyframes rippleBtn {
+      to {opacity:0; transform:translate(50%,-50%) scale(2);}
     }
     .counter {
       text-align:center;
@@ -270,9 +245,6 @@
       overflow: visible;
       direction: rtl;
       text-align: right;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
     }
     .add-bike-form .form-title {
       font-weight:700;
@@ -285,16 +257,15 @@
     .add-bike-form input[type="text"], .add-bike-form select {
       width:100%;
       margin-bottom:10px;
-      padding:15px 13px;
+      padding:11px;
       border-radius:11px;
       border:1.7px solid #eee;
-      font-size:1.03em;
+      font-size:1em;
       font-family:inherit;
       background: #f9f9f9;
       transition: border 0.2s;
       direction: rtl;
       text-align: right;
-      min-height: 47px;
     }
     .add-bike-form input[type="text"]:focus, .add-bike-form select:focus {
       outline:none;
@@ -320,8 +291,8 @@
       color: #fff;
       border: none;
       border-radius: 11px;
-      padding: 14px 30px;
-      font-size:1.09em;
+      padding: 11px 30px;
+      font-size:1.08em;
       font-weight:700;
       cursor:pointer;
       font-family:'Cairo', 'Tajawal', 'Almarai', Arial;
@@ -333,8 +304,19 @@
       align-items: center;
       gap: 7px;
       flex-direction: row-reverse;
-      min-width: 0;
-      justify-content: center;
+    }
+    .add-bike-form .add-btn:active::after {
+      content: '';
+      position: absolute;
+      right: 50%;
+      top: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(50%,-50%) scale(1.1);
+      background: rgba(52,211,153,0.13);
+      border-radius: 11px;
+      z-index: 1;
+      animation: rippleBtn 0.3s linear;
     }
     .add-bike-form .msg {
       margin-right:13px;
@@ -477,7 +459,6 @@
       gap: 9px;
       margin-top: 13px;
       flex-direction: row-reverse;
-      flex-wrap: wrap;
     }
     .share-btn, .delete-btn {
       background: var(--gradient);
@@ -497,7 +478,6 @@
       overflow: hidden;
       transition: box-shadow 0.2s, transform 0.17s;
       flex-direction: row-reverse;
-      min-width: 0;
     }
     .share-btn:active, .delete-btn:active {
       box-shadow:0 4px 20px #34d39933;
@@ -550,128 +530,13 @@
     }
     .share-popup .copied{display:none;margin-top:8px;color:var(--green);font-weight:700;}
     .share-popup .copied.active{display:block;}
-    @media (max-width: 1024px) {
-      .header-glass {max-width: 98vw;}
-      .bikes-list {padding: 0 4vw;}
-    }
-    @media (max-width: 768px) {
-      .header {padding: 27px 5px 14px;}
-      .title {font-size: 1.65em;}
-      .subtitle{font-size: 1em;}
-      .glass, .header-glass {padding: 11px 5px;}
-      .category-filters {gap: 7px;}
-      .add-bike-form {padding: 14px 4px 10px;}
-      .add-bike-form .form-title {font-size:1.07em;}
-      .bikes-list {gap: 18px; margin-top: 29px;}
-      .bike-card {padding: 18px 7px 10px;}
-      .bike-name {font-size: 1em; padding: 7px 12px;}
-      .badge {font-size: 0.97em; padding: 6px 13px;}
-    }
-    @media (max-width: 600px) {
-      .header {padding: 16px 2px 7px;}
-      .title {font-size: 1.18em;}
-      .subtitle{font-size: 0.93em;}
-      .header-glass {min-width: 0;}
-      .glass, .header-glass {padding: 7px 1vw;}
-      .search-bar-box {max-width: 99vw; width: 100%;}
-      .search-bar {font-size: 0.99em; padding: 10px 12px 10px 37px; min-height: 42px;}
-      .search-icon {left: 10px; font-size: 1.1em;}
-      .whatsapp-contact-row {
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-        align-items: stretch;
-        margin-top: 12px;
-      }
-      .whatsapp-contact-btn, .facebook-contact-btn {
-        width: 100%;
-        min-width: 0;
-        max-width: none;
-        padding: 11px 0;
-        font-size: 1em;
-        border-radius: 18px;
-        justify-content: center;
-      }
-      .facebook-contact-btn {
-        margin-left: 0;
-        margin-top: 0;
-        padding: 11px 0;
-      }
-      .category-filters {
-        gap: 6px;
-        margin: 16px 0 7px;
-      }
-      .filter-btn {
-        font-size: 0.98em;
-        padding: 7px 11px;
-        min-width: 0;
-      }
-      .counter {font-size: 0.99em;}
-      .add-bike-form {padding: 8px 1vw 8px;gap: 2px;}
-      .add-bike-form .form-title {font-size:0.98em;}
-      .add-bike-form input[type="text"], .add-bike-form select {
-        padding: 12px 10px;
-        min-height: 38px;
-        font-size: 0.97em;
-      }
-      .add-bike-form input[type="file"] {
-        font-size: 0.95em;
-        padding: 7px 3px;
-      }
-      .add-bike-form .add-btn {
-        font-size: 0.99em;
-        padding: 10px 0;
-        border-radius: 14px;
-      }
-      .bike-name {font-size: 0.97em; padding: 6px 7px;}
-      .bike-desc {font-size:0.95em; padding: 7px 6px;}
-      .badge {font-size: 0.9em; padding: 5px 8px; right: 7px; top: 8px;}
-      .bikes-list {gap: 10px; margin-top: 14px; padding: 0 3vw;}
-      .bike-card {padding:12px 3px 7px;}
-      .card-btns {gap: 6px;}
-      .share-btn, .delete-btn {
-        padding:8px 0;
-        font-size: 0.98em;
-        border-radius: 13px;
-        min-width: 0;
-        width: 100%;
-        justify-content: center;
-      }
-      .footer {font-size: 0.97em; padding: 14px 5px 6px; margin-top: 22px;}
-      .popup-img-box {padding: 0.5em; max-width: 98vw;}
-      .popup-img {max-width: 96vw; max-height: 60vh;}
-      .close-btn {font-size: 1.5em; left: 5px; top: 3px;}
-      .share-popup {width: 98vw; padding: 16px 4px 13px;}
-      .share-popup input {font-size: 0.96em;}
-      .share-popup-title {font-size: 0.98em;}
-      .share-popup .copy-btn {padding: 8px 0; font-size: 0.97em;}
-    }
-    @media (max-width: 480px) {
-      .add-bike-form {padding: 4px 2px 6px;}
-      .add-bike-form input[type="text"], .add-bike-form select {padding: 10px 6px;}
-      .bikes-list {padding: 0 1vw;}
-      .footer {font-size: 0.92em;}
-    }
-    @media (max-width: 400px) {
-      .header-glass {padding: 2px 0;}
-      .glass {padding: 4px 0;}
-      .title {font-size: 0.99em;}
-      .subtitle {font-size: 0.85em;}
-    }
-    @media (max-width: 400px), (max-width: 380px) {
-      .add-bike-form {max-width: 99vw;}
-      .share-popup {width: 99vw;}
-    }
-    @media (max-width: 520px){
-      .header{padding:11px 1vw 2px;}
-      .glass, .header-glass {padding:5px 1vw;}
-      .category-filters{gap:4px;}
-    }
+    @media (max-width:800px){.bikes-list{grid-template-columns:1fr;}.badge{right:9px;top:9px;} .add-bike-form{padding: 18px 7px;} .footer{font-size:0.97em;} .bike-name{font-size:1em;} .bike-card{padding:18px 7px 15px;} }
+    @media (max-width:520px){.header{padding:24px 4px 11px;} .glass{padding:10px 7px;} .search-bar-box{max-width:99vw;} }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="glass header-glass">
+    <div class="glass">
       <img src="https://i.postimg.cc/kgrvnzGZ/image-2-Photoroom.png" class="logo" alt="شعار مالوك بايك">
       <div class="title">Mallouk Bike </div>
       <div class="subtitle">اهلا بك في متجرنا 🛒🚀</div>
@@ -679,20 +544,17 @@
         <input type="text" class="search-bar" id="searchBar" placeholder="ابحث عن منتج..." autocomplete="off">
         <span class="search-icon"><i class="fa fa-search"></i></span>
       </div>
-      <div class="whatsapp-contact-row" id="contact-row">
-        <a href="https://wa.me/96170323991" target="_blank" rel="noopener noreferrer" class="whatsapp-contact-btn" aria-label="اتصل بنا عبر واتساب" title="اتصل بنا عبر واتساب">
+      <div class="whatsapp-contact-row">
+        <a href="https://wa.me/96170323991" target="_blank" rel="noopener noreferrer" class="whatsapp-contact-btn" aria-label="اتصل بنا عبر واتساب (Contactez-nous sur WhatsApp)" title="اتصل بنا عبر واتساب">
           <span style="margin-left:8px;"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
           <span>اتصل بنا</span>
-        </a>
-        <a href="https://www.facebook.com/share/1FQUFSrcBb/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="contact-btn facebook-contact-btn" aria-label="تواصل معنا عبر فيسبوك" title="تواصل معنا عبر فيسبوك">
-          <span class="icon"><i class="fab fa-facebook" aria-hidden="true"></i></span>
-          <span>فيسبوك</span>
         </a>
       </div>
     </div>
     <div class="category-filters" id="categoryFilters"></div>
     <div class="counter" id="counter"></div>
   </div>
+
   <div class="add-bike-form">
     <div class="form-title">إضافة منتج جديد 🚲🛴</div>
     <input type="text" id="newBikeName" placeholder="اسم المنتج">
@@ -711,14 +573,17 @@
     <button class="add-btn" id="addBikeBtn" onclick="addBike()"><i class="fa fa-plus-circle"></i>إضافة</button>
     <span class="msg" id="addBikeMsg"></span>
   </div>
+
   <div class="bikes-list" id="bikesList"></div>
   <div class="no-result" id="noResult" style="display:none;">لا يوجد منتجات مطابقة لبحثك... 😔</div>
+
   <div class="popup-overlay" id="popup">
     <div class="popup-img-box">
       <button class="close-btn" onclick="closePopup()"><i class="fa fa-times"></i></button>
       <img src="" class="popup-img" id="popup-img" alt="تكبير المنتج" />
     </div>
   </div>
+
   <div class="share-overlay" id="share-overlay" onclick="closeShare()"></div>
   <div class="share-popup" id="share-popup">
     <button class="close-btn" onclick="closeShare()"><i class="fa fa-times"></i></button>
@@ -727,13 +592,15 @@
     <button class="copy-btn" id="copy-share-btn"><i class="fa fa-copy"></i>نسخ الرابط</button>
     <span class="copied" id="copied-msg"><i class="fa fa-check"></i> تم نسخ الرابط!</span>
   </div>
+
   <div class="footer">
     © Mallouk Bike  – شارك وزرنا مجدداً!
   </div>
+
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <script>
-    // --- JS Mallouk Bike (all in one file) ---
+    // === CONFIGURATION ===
     const CATEGORIES = [
       {id:'vtt',label:'دراجات جبلية',badge:'vtt'},
       {id:'route',label:'دراجات سياحي',badge:'route'},
@@ -757,17 +624,23 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const ADMIN_PASSWORD = "2026";
+
+    // === STATE ===
     let allBikes = [];
     let renderTimer = null;
     let currentCategory = 'all';
     let currentSearch = '';
     let highlightBikeId = null;
     let highlightTimeout = null;
+
+    // === INIT ===
     renderCategoryFilters();
     attachSearchHandler();
-    getHighlightFromUrl();
+    getHighlightFromUrl(); // Important: do this before first load!
     loadBikesRealtime();
     setCategoryFilterActive('all');
+
+    // === FUNCTION: Remove bike_id from URL and reset highlightBikeId ===
     function removeBikeIdFromUrl() {
       const url = new URL(window.location.href);
       if (url.searchParams.has('bike_id')) {
@@ -776,9 +649,12 @@
       }
       highlightBikeId = null;
     }
+
+    // === CATEGORY FILTERS ===
     function renderCategoryFilters() {
       const filters = document.getElementById('categoryFilters');
       filters.innerHTML = '';
+      // Always 'all' first
       const btnAll = document.createElement('button');
       btnAll.className = 'filter-btn active';
       btnAll.textContent = 'الكل';
@@ -811,12 +687,16 @@
       setCategoryFilterActive(catId);
       delayedRender(true);
     }
+
+    // === SEARCH BAR ===
     function attachSearchHandler() {
-      document.getElementById('searchBar').addEventListener('input', function(){
+      document.getElementById('searchBar').addEventListener('input', function(e){
         currentSearch = this.value.trim().toLowerCase();
         delayedRender();
       });
     }
+
+    // === LOAD DATA & RENDER ===
     function loadBikesRealtime() {
       db.ref('mallouk_bikes').on('value', function(snapshot) {
         const bikesObj = snapshot.val() || {};
@@ -830,6 +710,7 @@
     }
     function renderBikes(animate = false) {
       let bikes = allBikes;
+      // Recherche
       if(currentSearch) {
         bikes = bikes.filter(bike => {
           const name = bike.name?.toLowerCase() || '';
@@ -838,10 +719,13 @@
           return name.includes(currentSearch) || desc.includes(currentSearch) || (CATEGORY_LOOKUP[cat]?.label.toLowerCase().includes(currentSearch));
         });
       }
+      // Filtre catégorie
       if(currentCategory !== 'all') {
         bikes = bikes.filter(bike => bike.category === currentCategory);
       }
+      // Tri par date/id desc
       bikes = bikes.slice().sort((a,b) => b.id - a.id);
+      // Affichage
       const list = document.getElementById('bikesList');
       list.innerHTML = '';
       document.getElementById('counter').textContent = bikes.length ? (`${bikes.length} منتج${bikes.length === 1 ? '' : 'ات'} معروضة`) : '';
@@ -869,6 +753,8 @@
       attachZoom();
       highlightBikeIfNeeded();
     }
+
+    // === PRODUCT ZOOM ===
     const popup = document.getElementById('popup');
     const popupImg = document.getElementById('popup-img');
     function attachZoom() {
@@ -888,16 +774,20 @@
     document.addEventListener('keydown',function(e){
       if(e.key === 'Escape'){closePopup();closeShare();}
     });
+
+    // === HIGHLIGHT PRODUCT BY URL (?bike_id=...) ===
     function getHighlightFromUrl() {
       const params = new URLSearchParams(window.location.search);
       highlightBikeId = params.get('bike_id');
       if (highlightBikeId) {
+        // Réinitialise le filtre sur "الكل" pour garantir la visibilité
         currentCategory = 'all';
         setCategoryFilterActive('all');
       }
     }
     function highlightBikeIfNeeded() {
       if (!highlightBikeId) return;
+      // On annule tout highlight précédent
       if (highlightTimeout) {
         clearTimeout(highlightTimeout);
         highlightTimeout = null;
@@ -907,17 +797,22 @@
         if (targetCard) {
           targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
           targetCard.classList.add('product-highlight');
+          // Retire la surbrillance et le paramètre bike_id après 3s
           highlightTimeout = setTimeout(() => {
             targetCard.classList.remove('product-highlight');
             removeBikeIdFromUrl();
           }, 3000);
         } else {
+          // Si introuvable (filtre ou suppression), retire quand même l'URL
           highlightTimeout = setTimeout(removeBikeIdFromUrl, 3000);
         }
       }, 400);
     }
+
+    // === SHARING LOGIC ===
     function shareBikeById(bikeId) {
       const url = window.location.origin + window.location.pathname + '?bike_id=' + encodeURIComponent(bikeId);
+      // Web Share API si dispo
       if (navigator.share) {
         const bike = allBikes.find(b => b.id == bikeId);
         const title = bike?.name || 'منتج من Mallouk Bike';
@@ -927,6 +822,7 @@
           text,
           url
         }).catch(() => {
+          // Fallback si refusé
           openSharePopup(url);
         });
       } else {
@@ -954,6 +850,8 @@
       document.getElementById('share-overlay').classList.remove('active');
     }
     window.closeShare = closeShare;
+
+    // === ADMIN ADD/DELETE LOGIC ===
     function demandeMotDePasse(action) {
       let saisie = prompt(`يرجى إدخال كلمة المرور لـ ${action} :`);
       return saisie === ADMIN_PASSWORD;
