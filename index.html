@@ -587,8 +587,7 @@
   <div class="share-overlay" id="share-overlay" onclick="closeShare()"></div>
   <div class="share-popup" id="share-popup">
     <button class="close-btn" onclick="closeShare()"><i class="fa fa-times"></i></button>
-    <div class="share-popup-title">شارك هذا المنتج 🚴
-♂️</div>
+    <div class="share-popup-title">شارك هذا المنتج 🚴♂️</div>
     <input type="text" id="share-link" readonly value="">
     <button class="copy-btn" id="copy-share-btn"><i class="fa fa-copy"></i>نسخ الرابط</button>
     <span class="copied" id="copied-msg"><i class="fa fa-check"></i> تم نسخ الرابط!</span>
@@ -632,13 +631,14 @@
     let currentCategory = 'all';
     let currentSearch = '';
     let highlightBikeId = null;
+    let highlightTimeout = null;
 
     // === INIT ===
     renderCategoryFilters();
     attachSearchHandler();
+    getHighlightFromUrl(); // Important: do this before first load!
     loadBikesRealtime();
     setCategoryFilterActive('all');
-    getHighlightFromUrl();
 
     // === FUNCTION: Remove bike_id from URL and reset highlightBikeId ===
     function removeBikeIdFromUrl() {
@@ -779,17 +779,32 @@
     function getHighlightFromUrl() {
       const params = new URLSearchParams(window.location.search);
       highlightBikeId = params.get('bike_id');
+      if (highlightBikeId) {
+        // Réinitialise le filtre sur "الكل" pour garantir la visibilité
+        currentCategory = 'all';
+        setCategoryFilterActive('all');
+      }
     }
     function highlightBikeIfNeeded() {
       if (!highlightBikeId) return;
+      // On annule tout highlight précédent
+      if (highlightTimeout) {
+        clearTimeout(highlightTimeout);
+        highlightTimeout = null;
+      }
       setTimeout(() => {
         const targetCard = Array.from(document.querySelectorAll('.bike-card')).find(card => card.getAttribute('data-id') === highlightBikeId);
         if (targetCard) {
           targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
           targetCard.classList.add('product-highlight');
-          setTimeout(() => {
+          // Retire la surbrillance et le paramètre bike_id après 3s
+          highlightTimeout = setTimeout(() => {
             targetCard.classList.remove('product-highlight');
+            removeBikeIdFromUrl();
           }, 3000);
+        } else {
+          // Si introuvable (filtre ou suppression), retire quand même l'URL
+          highlightTimeout = setTimeout(removeBikeIdFromUrl, 3000);
         }
       }, 400);
     }
@@ -797,6 +812,24 @@
     // === SHARING LOGIC ===
     function shareBikeById(bikeId) {
       const url = window.location.origin + window.location.pathname + '?bike_id=' + encodeURIComponent(bikeId);
+      // Web Share API si dispo
+      if (navigator.share) {
+        const bike = allBikes.find(b => b.id == bikeId);
+        const title = bike?.name || 'منتج من Mallouk Bike';
+        const text = bike?.desc ? bike.desc + ' - من Mallouk Bike' : 'من Mallouk Bike';
+        navigator.share({
+          title,
+          text,
+          url
+        }).catch(() => {
+          // Fallback si refusé
+          openSharePopup(url);
+        });
+      } else {
+        openSharePopup(url);
+      }
+    }
+    function openSharePopup(url) {
       document.getElementById('share-popup').classList.add('active');
       document.getElementById('share-overlay').classList.add('active');
       document.getElementById('share-link').value = url;
