@@ -122,6 +122,7 @@
       align-items: center;
       margin: 18px 0 0 0;
       width: 100%;
+      gap: 14px;
     }
     .whatsapp-contact-btn {
       display: inline-flex;
@@ -166,6 +167,30 @@
       margin-right: 0;
       filter: drop-shadow(0 2px 8px #128c7e33);
     }
+    .facebook-contact-btn {
+      background: linear-gradient(90deg, #1877f3 70%, #145db2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      box-shadow: 0 2px 8px rgba(24,119,243,0.10);
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      padding: 7px 18px;
+      text-decoration: none;
+      margin-left: 8px; /* espace par rapport au bouton WhatsApp */
+      transition: background 0.14s, box-shadow 0.14s;
+    }
+    .facebook-contact-btn .icon {
+      color: #fff;
+      font-size: 1.3rem;
+      margin-left: 8px;
+    }
+    .facebook-contact-btn:hover, .facebook-contact-btn:focus {
+      background: linear-gradient(80deg, #145db2 70%, #1877f3 100%);
+      color: #fff;
+    }
+
     @keyframes fadeInScale {
       0% { opacity: 0; transform: scale(0.8) translateY(-12px); }
       60% { opacity: 1; transform: scale(1.04) translateY(5px); }
@@ -548,6 +573,10 @@
         <a href="https://wa.me/96170323991" target="_blank" rel="noopener noreferrer" class="whatsapp-contact-btn" aria-label="اتصل بنا عبر واتساب (Contactez-nous sur WhatsApp)" title="اتصل بنا عبر واتساب">
           <span style="margin-left:8px;"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
           <span>اتصل بنا</span>
+        </a>
+        <a href="https://www.facebook.com/share/1FQUFSrcBb/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="contact-btn facebook-contact-btn" aria-label="تواصل معنا عبر فيسبوك (Contactez-nous sur Facebook)" title="تواصل معنا عبر فيسبوك">
+          <span class="icon"><i class="fab fa-facebook" aria-hidden="true"></i></span>
+          <span>فيسبوك</span>
         </a>
       </div>
     </div>
