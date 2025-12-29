@@ -770,8 +770,23 @@
     }
 
     function incrementProductView(bikeId){
-    db.ref("stats/views/" + bikeId).transaction(v => (v || 0) + 1);
+        const viewRef = db.ref("stats/views/" + bikeId);
+        viewRef.transaction(v => (v || 0) + 1, (error, committed, snapshot) => {
+            if(error){
+                console.error("Erreur increment view:", error);
+            } else if(committed){
+                // Met à jour directement le compteur dans la carte si présent
+                const card = document.querySelector(`.bike-card[data-id='${bikeId}']`);
+                if(card){
+                    const viewsDiv = card.querySelector(".views-count");
+                    if(viewsDiv){
+                        viewsDiv.textContent = "👁️ المشاهدات: " + snapshot.val();
+                    }
+                }
+            }
+        });
     }
+
 
 
     function renderBikes(animate = false) {
@@ -813,6 +828,7 @@
         // === VUES PRODUIT (ADMIN SEULEMENT) ===
         if(isAdmin){
             const viewsDiv = document.createElement("div");
+            viewsDiv.className = "views-count"; // <-- ajoute cette classe
             viewsDiv.style.marginTop = "8px";
             viewsDiv.style.fontSize = "0.9em";
             viewsDiv.style.fontWeight = "700";
@@ -822,9 +838,9 @@
                 viewsDiv.textContent = "👁️ المشاهدات: " + (snap.val() || 0);
             });
 
-
             card.appendChild(viewsDiv);
         }
+
 
         list.appendChild(card);
     });
