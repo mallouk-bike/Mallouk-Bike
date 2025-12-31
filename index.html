@@ -533,6 +533,9 @@
     @media (max-width:800px){.bikes-list{grid-template-columns:1fr;}.badge{right:9px;top:9px;} .add-bike-form{padding: 18px 7px;} .footer{font-size:0.97em;} .bike-name{font-size:1em;} .bike-card{padding:18px 7px 15px;} }
     @media (max-width:520px){.header{padding:24px 4px 11px;} .glass{padding:10px 7px;} .search-bar-box{max-width:99vw;} }
   </style>
+  
+  <link rel="manifest" href="manifest.json">
+
 </head>
 <body>
   <!-- HEADER -->
@@ -952,5 +955,14 @@
     window.history.replaceState({}, '', url);
     }
   </script>
+  
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("Service Worker OK"))
+      .catch(err => console.error("Service Worker erreur", err));
+  }
+  </script>
+
 </body>
 </html>
